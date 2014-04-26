@@ -1,0 +1,70 @@
+<html>
+
+  <title>example</title>
+  <head>
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/bootstrap/css/bootstrap-theme.min.css">
+  <script src="/static/jquery-2.1.0.js"></script>
+  <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>Search workspace <small>place input username(test1 or test2)</small></h1>
+      </div>
+    <form action="/search.php" method="GET" id="search_form" class="search">
+      <div class="row">
+        <div class="col-lg-6">
+      <div class="input-group">
+       <input type="text" class="form-control" placeholder="Username(Don't given username to show all workspace in the database)" name="username">
+      <span class="input-group-btn">
+            <button class="btn btn-default" type="submit" id="search_button">Go!</button>
+        </span>
+      </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
+    </form>
+    <div class="table-responsive" id="result">
+      <table class="table">
+        <thead>
+          <tr>
+            <td>id</td>
+            <td>Username</td>
+          <td>workspace</td>
+          <td>title</td>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+                </table>
+    </div>
+    <script>
+      //$("#result").hide();
+      $('#search_form').submit(function() {
+        $form = $(this);
+        $tr = ""
+        $.ajax({
+               type: $form.attr("method"),
+                url: $form.attr("action"),
+                data: $form.serialize(),
+                success: function(res){
+                  var r = JSON.parse(res);
+                  $.each(r, function(index, value){
+                    console.log(value);
+                    $tr = $tr + "<tr><td>" + value.id + "</td>";
+                    $tr = $tr + "<td>" + value.username + "</td>";
+                    $tr = $tr + "<td>" + value.name + "</td>";
+                    $tr = $tr + "<td>" + value.title + "</td></tr>";
+                  });
+                console.log($tr);
+                $("table tbody").html($tr);
+                $("#result-div").show();
+                },
+              });
+            return false;
+          });
+       //$("#search_button").unbind('click').click(function() {
+       //              alert('现有事件');
+       //                        });
+  </script>
+    </body>
+</html>
